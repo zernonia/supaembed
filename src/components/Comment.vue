@@ -24,7 +24,14 @@ const isReplying = ref(false)
         </button>
       </div>
 
-      <CommentInput v-if="isReplying" class="mt-4" :post_id="comment.post_id" :parent_id="comment.id"></CommentInput>
+      <CommentInput
+        v-bind="$attrs"
+        class="mt-4"
+        v-if="isReplying"
+        :post_id="comment.post_id"
+        :parent_id="comment.id"
+        @submitted="isReplying = false"
+      ></CommentInput>
       <Comment class="mt-4 border-none" v-for="child in comment.child" :comment="child"></Comment>
     </div>
   </div>

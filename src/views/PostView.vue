@@ -3,9 +3,10 @@ import type { Comment, Post } from "@/interface"
 import { route, goTo } from "@/state/router"
 import { store } from "@/state/store"
 import { useSupabase } from "@/composables/supabase"
-import { computed, onMounted, onUnmounted, watch } from "vue"
+import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 
 const supabase = useSupabase()
+const pending = ref(false)
 
 const upvote = async (post: Post) => {
   const isActive = post.active_for_user
@@ -18,6 +19,7 @@ const upvote = async (post: Post) => {
   })
   console.log(data)
 }
+
 const post = computed(() => route.params as Post)
 
 const recursiveComment = (comments: Comment[], parent_id: string | null) => {
@@ -37,11 +39,8 @@ const recursiveComment = (comments: Comment[], parent_id: string | null) => {
   return arr
 }
 
-onUnmounted(() => {
-  store.comments = []
-})
-
-onMounted(async () => {
+const fetchData = async () => {
+  pending.value = true
   const { data } = await supabase
     .from<Comment>("comments")
     .select("*, user:display_users!user_id(*)")
@@ -49,8 +48,15 @@ onMounted(async () => {
   // .is("parent_id", null)
   if (data) {
     store.comments = recursiveComment(data, null)
-    console.log(store.comments, recursiveComment(data, null))
   }
+  pending.value = false
+}
+onUnmounted(() => {
+  store.comments = []
+})
+
+onMounted(async () => {
+  fetchData()
 })
 </script>
 
@@ -94,12 +100,13 @@ onMounted(async () => {
 
         <!-- Comments -->
         <div class="p-6">
-          <CommentInput :post_id="post.id"></CommentInput>
+          <CommentInput @submitted="fetchData()" :post_id="post.id"></CommentInput>
 
           <h5 class="mt-8 font-semibold text-gray-800">Activity</h5>
 
           <div class="mt-4">
-            <Comment v-for="comment in store.comments" :comment="comment"></Comment>
+            <Loading v-if="pending && !store.comments.length"></Loading>
+            <Comment @submitted="fetchData()" v-for="comment in store.comments" :comment="comment"></Comment>
           </div>
         </div>
       </div>
