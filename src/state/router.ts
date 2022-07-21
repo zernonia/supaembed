@@ -1,8 +1,8 @@
 import { reactive } from "vue"
 
 export const route = reactive({
-  page: "roadmap",
-  params: {} as any,
+  page: "category",
+  params: { category: "bugs" } as any,
 })
 
 export const goTo = (key: { page: string; params?: any }) => {

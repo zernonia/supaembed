@@ -9,3 +9,40 @@ textarea {
   outline-offset: 0px !important;
   @apply !rounded-md !border-gray-200 w-full focus:outline-orange-500 ring-transparent text-sm px-4 py-2.5 placeholder-gray-400 font-sans;
 }
+
+.nav-button {
+  @apply px-3 py-2 border rounded-lg flex items-center opacity-75 hover:opacity-100 transition text-gray-800 text-sm font-medium;
+}
+
+@-ms-keyframes rotate {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -3,6 +3,8 @@ import slugify from "slugify"
 import { useSupabase } from "@/composables/supabase"
 import { route } from "@/state/router"
 
+const emits = defineEmits(["submitted"])
+
 const supabase = useSupabase()
 const save = async (ev: any) => {
   const { data } = await supabase.from("posts").insert({
@@ -11,6 +13,7 @@ const save = async (ev: any) => {
     slug: slugify(ev.title, { lower: true }),
     category: route.params.category,
   })
+  emits("submitted")
   console.log(ev, data)
 }
 </script>
@@ -52,14 +55,18 @@ const save = async (ev: any) => {
 .formkit-outer {
   @apply pt-2;
 }
+.formkit-messages {
+  @apply text-xs text-red-500;
+}
 
 [data-type="submit"] .formkit-input {
-  @apply bg-orange-500 px-4 py-2 text-white rounded-md;
+  @apply relative inline-flex items-center bg-orange-500 px-4 py-2 w-auto text-white rounded-md focus:outline-orange-600 opacity-100 disabled:opacity-50 disabled:cursor-not-allowed transition;
 }
+
 [data-loading] [data-type="submit"] .formkit-input::before {
   -webkit-animation: rotate 0.5s linear infinite;
   animation: rotate 0.5s linear infinite;
-  width: 1.28571428em;
+  width: 1rem;
   border: 0.1428571429em solid #fff;
   border-right-color: transparent;
   margin-right: 0.75em;
@@ -69,9 +76,9 @@ const save = async (ev: any) => {
   content: "";
   width: 0;
   margin-right: 0;
-  height: 1.28571428em;
+  height: 1rem;
   border: 0 solid transparent;
-  border-radius: 1.28571428em;
+  border-radius: 1rem;
   transition: width 0.25s, border 0.25s, margin-right 0.25s;
 }
 </style>

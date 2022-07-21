@@ -10,14 +10,11 @@ declare module '@vue/runtime-core' {
     Avatar: typeof import('./src/components/Avatar.vue')['default']
     Comment: typeof import('./src/components/Comment.vue')['default']
     CommentInput: typeof import('./src/components/CommentInput.vue')['default']
-    Comments: typeof import('./src/components/Comments.vue')['default']
     Form: typeof import('./src/components/Form.vue')['default']
     IonArrowUp: typeof import('./src/components/IonArrowUp.vue')['default']
     IonBack: typeof import('./src/components/IonBack.vue')['default']
-    IonCaretBack: typeof import('./src/components/IonCaretBack.vue')['default']
     IonChat: typeof import('./src/components/IonChat.vue')['default']
-    IonChatbubble: typeof import('./src/components/IonChatbubble.vue')['default']
     IonReply: typeof import('./src/components/IonReply.vue')['default']
-    Post: typeof import('./src/components/Post.vue')['default']
+    Loading: typeof import('./src/components/Loading.vue')['default']
   }
 }

@@ -57,10 +57,7 @@ onMounted(async () => {
 <template>
   <div>
     <nav>
-      <button
-        class="px-3 py-2 border rounded-lg flex items-center opacity-50 hover:opacity-100 transition text-gray-800 text-sm font-medium"
-        @click="goTo({ page: 'category', params: route.params })"
-      >
+      <button class="nav-button" @click="goTo({ page: 'category', params: route.params })">
         <IonBack class="mr-3"></IonBack><span class="mr-0.5">Back to board</span>
       </button>
     </nav>

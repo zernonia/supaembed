@@ -6,19 +6,27 @@ import type { Post } from "@/interface"
 import { useSupabase } from "@/composables/supabase"
 
 const supabase = useSupabase()
+
+const pending = ref(false)
+const fetchData = async () => {
+  pending.value = true
+  const { data } = await supabase
+    .from<Post>("posts_with_metadata")
+    .select("*, user:display_users!user_id(*)")
+    .match({ category: route.params.category })
+  if (data) {
+    store.posts = data
+  }
+  pending.value = false
+}
+
 watch(
-  () => route.params.category,
-  async (n, o) => {
+  () => route.params?.category,
+  (n, o) => {
     if (n === o) return
     store.posts = []
 
-    const { data } = await supabase
-      .from<Post>("posts_with_metadata")
-      .select("*, user:display_users!user_id(*)")
-      .match({ category: route.params.category })
-    if (data) {
-      store.posts = data
-    }
+    fetchData()
   },
   { immediate: true }
 )
@@ -37,20 +45,21 @@ const upvote = async (post: Post) => {
 </script>
 <template>
   <div>
-    <nav>
-      <button @click="goTo({ page: 'roadmap' })">Roadmap</button>
-      <button @click="goTo({ page: 'category', params: { category: 'bugs' } })">Bugs</button>
-      <button @click="goTo({ page: 'category', params: { category: 'feature requests' } })">Feature requests</button>
+    <nav class="flex space-x-2">
+      <button class="nav-button" @click="goTo({ page: 'category', params: { category: 'bugs' } })">Bugs</button>
+      <button class="nav-button" @click="goTo({ page: 'category', params: { category: 'feature requests' } })">
+        Feature requests
+      </button>
     </nav>
 
-    <div class="w-full flex">
+    <div class="w-full flex mt-4">
       <div class="flex-grow">
-        <div>
-          <input type="search" placeholder="Search" />
-          <button>filtering</button>
-        </div>
-        <ul class="mt-6">
-          <li class="p-6 border-t flex" v-for="post in store.posts">
+        <!-- <div>
+          <input class="!w-64" type="search" placeholder="Search" />
+        </div> -->
+        <Loading v-if="pending && !store.posts.length"></Loading>
+        <ul v-else>
+          <li class="p-6 border-b flex" v-for="post in store.posts">
             <button
               :class="[post.active_for_user ? 'text-orange-500 border-orange-500' : 'text-gray-400']"
               class="flex flex-col flex-shrink-0 items-center p-3 rounded-xl border w-16 h-max font-semibold"
@@ -80,7 +89,7 @@ const upvote = async (post: Post) => {
         </ul>
       </div>
       <div class="ml-6 min-w-72">
-        <Form></Form>
+        <Form @submitted="fetchData"></Form>
       </div>
     </div>
   </div>
