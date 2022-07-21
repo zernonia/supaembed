@@ -3,3 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
 }
+
+input,
+textarea {
+  outline-offset: 0px !important;
+  @apply !rounded-md !border-gray-200 w-full focus:outline-orange-500 ring-transparent text-sm px-4 py-2.5 placeholder-gray-400 font-sans;
+}

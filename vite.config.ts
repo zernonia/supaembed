@@ -4,10 +4,18 @@ import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js"
 import WindiCSS from "vite-plugin-windicss"
+import Components from "unplugin-vue-components/vite"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), WindiCSS(), cssInjectedByJsPlugin()],
+  plugins: [
+    vue(),
+    WindiCSS(),
+    Components({
+      dts: true,
+    }),
+    cssInjectedByJsPlugin(),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

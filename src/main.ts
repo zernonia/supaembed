@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js"
 import { plugin, defaultConfig } from "@formkit/vue"
 import App from "./App.vue"
 import "virtual:windi.css"
-import "@formkit/themes/genesis"
+// import "@formkit/themes/genesis"
 
 import "./assets/main.css"
 const app = createApp(App)

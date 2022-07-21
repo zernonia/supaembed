@@ -5,10 +5,12 @@ import { computed, onMounted, toRefs } from "vue"
 
 import Roadmap from "./views/Roadmap.vue"
 import Category from "./views/Category.vue"
+import PostView from "./views/PostView.vue"
 
 const routeMap = {
   roadmap: Roadmap,
   category: Category,
+  postview: PostView,
 }
 
 const supabase = useSupabase()
@@ -17,14 +19,6 @@ onMounted(async () => {
   const { data } = await supabase.from("posts").select("*")
   console.log({ data })
 })
-
-const upvote = async (value: number) => {
-  const { data, error } = await supabase.from("votes").upsert({
-    user_id: supabase.auth.user()?.id ?? "",
-    post_id: "822dd28b-8cc5-4cdc-adf3-13f02f2bb009",
-    value,
-  })
-}
 
 const currentView = computed(() => {
   //@ts-ignore
