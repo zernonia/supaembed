@@ -1,15 +1,17 @@
-import { createApp, type InjectionKey } from "vue"
-import { createClient, SupabaseClient } from "@supabase/supabase-js"
+import { createApp } from "vue"
+import { createClient } from "@supabase/supabase-js"
+import { plugin, defaultConfig } from "@formkit/vue"
 import App from "./App.vue"
-import router from "./router"
+import "virtual:windi.css"
+import "@formkit/themes/genesis"
 
 import "./assets/main.css"
 const app = createApp(App)
 
-app.use(router)
-app.provide(
-  "supabase",
-  createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_KEY, { schema: "supaembed" })
-)
+const el = document.getElementById("supaembed")
+app.use(plugin, defaultConfig)
+app.provide("supabase", createClient(el?.dataset.url ?? "", el?.dataset.anonKey ?? "", { schema: "supaembed" }))
+el?.removeAttribute("data-url")
+el?.removeAttribute("data-anon-key")
 
 app.mount("#supaembed")

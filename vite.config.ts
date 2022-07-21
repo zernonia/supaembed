@@ -2,22 +2,24 @@ import { fileURLToPath, URL } from "node:url"
 
 import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js"
+import WindiCSS from "vite-plugin-windicss"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), WindiCSS(), cssInjectedByJsPlugin()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
   build: {
-    assetsDir: "",
-    lib: {
-      entry: "src/main.ts",
-      formats: ["iife"],
-      name: "supaembed",
-      fileName: "supaembed",
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+        inlineDynamicImports: true,
+        entryFileNames: "embed.js",
+      },
     },
   },
 })
