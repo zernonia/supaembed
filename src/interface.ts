@@ -30,3 +30,10 @@ export interface Comment {
   comment: string
   child?: Comment[]
 }
+
+export interface Vote {
+  post_id: string
+  user_id: string
+  value: number
+  user: User
+}

@@ -1,28 +1,15 @@
 <script setup lang="ts">
-import type { Comment, Post } from "@/interface"
+import type { Comment, Post, User, Vote } from "@/interface"
 import { useRouter } from "@/composables/router"
-import { store } from "@/state/store"
 import { useSupabase } from "@/composables/supabase"
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 
 const { route, oldRoute, goTo } = useRouter()
 const supabase = useSupabase()
 const pending = ref(false)
-
-const upvote = async (post: Post) => {
-  const isActive = post.active_for_user
-  post.vote_count = post.active_for_user ? (post.vote_count ?? 0) - 1 : (post.vote_count ?? 0) + 1
-  post.active_for_user = !post.active_for_user
-  const { data, error } = await supabase.from("votes").upsert({
-    user_id: supabase.auth.user()?.id,
-    post_id: post.id,
-    value: isActive ? 0 : 1,
-  })
-  console.log(data)
-}
-
 const post = computed(() => route.params as Post)
 
+const comments = ref<Comment[]>([])
 const recursiveComment = (comments: Comment[], parent_id: string | null) => {
   const arr: Comment[] = []
   comments.forEach((cmt) => {
@@ -40,7 +27,7 @@ const recursiveComment = (comments: Comment[], parent_id: string | null) => {
   return arr
 }
 
-const fetchData = async () => {
+const fetchComment = async () => {
   pending.value = true
   const { data } = await supabase
     .from<Comment>("comments")
@@ -48,16 +35,39 @@ const fetchData = async () => {
     .eq("post_id", post.value.id)
   // .is("parent_id", null)
   if (data) {
-    store.comments = recursiveComment(data, null)
+    comments.value = recursiveComment(data, null)
   }
   pending.value = false
 }
+
+const voters = ref<Vote[]>([])
+const fetchVoters = async () => {
+  const { data } = await supabase.from<Vote>("votes").select("user:display_users!user_id(*)").match({
+    post_id: post.value.id,
+    value: 1,
+  })
+  if (data) voters.value = data
+}
+
+const upvote = async (post: Post) => {
+  const isActive = post.active_for_user
+  post.vote_count = post.active_for_user ? (post.vote_count ?? 0) - 1 : (post.vote_count ?? 0) + 1
+  post.active_for_user = !post.active_for_user
+  const { data, error } = await supabase.from("votes").upsert({
+    user_id: supabase.auth.user()?.id,
+    post_id: post.id,
+    value: isActive ? 0 : 1,
+  })
+  if (data) fetchVoters()
+}
+
 onUnmounted(() => {
-  store.comments = []
+  comments.value = []
 })
 
 onMounted(async () => {
-  fetchData()
+  fetchComment()
+  fetchVoters()
 })
 </script>
 
@@ -101,17 +111,22 @@ onMounted(async () => {
 
         <!-- Comments -->
         <div class="p-6">
-          <CommentInput @submitted="fetchData()" :post_id="post.id"></CommentInput>
+          <CommentInput @submitted="fetchComment()" :post_id="post.id"></CommentInput>
 
           <h5 class="mt-8 font-semibold text-gray-800">Activity</h5>
 
           <div class="mt-4">
-            <Loading v-if="pending && !store.comments.length"></Loading>
-            <Comment @submitted="fetchData()" v-for="comment in store.comments" :comment="comment"></Comment>
+            <Loading v-if="pending && !comments.length"></Loading>
+            <Comment @submitted="fetchComment()" v-for="comment in comments" :comment="comment"></Comment>
           </div>
         </div>
       </div>
-      <div class="ml-6 min-w-72">Voters</div>
+      <div class="ml-6 min-w-72 bg-gray-50 text-gray-800 p-6 rounded-xl border h-min min-h-64">
+        <h3 class="font-medium">Voters</h3>
+        <div class="mt-4 flex flex-wrap">
+          <Avatar class="mr-2 mb-2" v-for="{ user } in voters" :src="user.avatar" :alt="user.name"></Avatar>
+        </div>
+      </div>
     </div>
   </div>
 </template>
