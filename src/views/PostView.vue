@@ -14,7 +14,7 @@ const upvote = async (post: Post) => {
   post.vote_count = post.active_for_user ? (post.vote_count ?? 0) - 1 : (post.vote_count ?? 0) + 1
   post.active_for_user = !post.active_for_user
   const { data, error } = await supabase.from("votes").upsert({
-    user_id: supabase.auth.user()?.id ?? "",
+    user_id: supabase.auth.user()?.id,
     post_id: post.id,
     value: isActive ? 0 : 1,
   })
