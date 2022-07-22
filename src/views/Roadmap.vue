@@ -44,7 +44,7 @@ const postLive = computed(() => posts.value.filter((i) => i.status === Status["l
     </nav>
 
     <div class="grid grid-cols-3 gap-8 mt-8">
-      <div class="py-6 px-4 bg-gray-50 rounded-xl border">
+      <div class="py-6 px-4 rounded-xl">
         <div
           class="w-max uppercase text-xs font-semibold px-3 py-1 rounded-md"
           :class="computedStatusClass(Status['planned'])"
@@ -71,7 +71,7 @@ const postLive = computed(() => posts.value.filter((i) => i.status === Status["l
         </ul>
       </div>
 
-      <div class="py-6 px-4 bg-gray-50 rounded-xl border">
+      <div class="py-6 px-4 rounded-xl">
         <div
           class="w-max uppercase text-xs font-semibold px-3 py-1 rounded-md"
           :class="computedStatusClass(Status['in progress'])"
@@ -98,7 +98,7 @@ const postLive = computed(() => posts.value.filter((i) => i.status === Status["l
         </ul>
       </div>
 
-      <div class="py-6 px-4 bg-gray-50 rounded-xl border">
+      <div class="py-6 px-4 rounded-xl">
         <div
           class="w-max uppercase text-xs font-semibold px-3 py-1 rounded-md"
           :class="computedStatusClass(Status['live'])"
