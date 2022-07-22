@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { goTo } from "@/state/router"
+import { useRouter } from "@/composables/router"
+const { route, goTo } = useRouter()
 </script>
 
 <template>

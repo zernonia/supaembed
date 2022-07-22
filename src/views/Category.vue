@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { watch, ref, onMounted } from "vue"
-import { route, goTo } from "@/state/router"
+import { watch, ref, onMounted, nextTick } from "vue"
+import { useRouter } from "@/composables/router"
 import { store } from "@/state/store"
 import type { Post } from "@/interface"
 import { useSupabase } from "@/composables/supabase"
 
+const { route, goTo } = useRouter()
 const supabase = useSupabase()
 
 const pending = ref(false)
 const fetchData = async () => {
+  if (!route.params.category) return
   pending.value = true
   const { data } = await supabase
     .from<Post>("posts_with_metadata")
@@ -20,13 +22,19 @@ const fetchData = async () => {
   pending.value = false
 }
 
-watch(
-  () => route.params?.category,
-  (n, o) => {
-    if (n === o) return
-    store.posts = []
+onMounted(() => {
+  fetchData()
+})
 
-    fetchData()
+watch(
+  () => route.params.category,
+  (n, o) => {
+    if (!n || !o) return
+    if (n !== o) {
+      console.log(n, o)
+      store.posts = []
+      fetchData()
+    }
   },
   { immediate: true }
 )
@@ -58,19 +66,25 @@ const upvote = async (post: Post) => {
           <input class="!w-64" type="search" placeholder="Search" />
         </div> -->
         <Loading v-if="pending && !store.posts.length"></Loading>
-        <ul v-else>
-          <li class="p-6 border-b flex" v-for="post in store.posts">
-            <button
-              :class="[post.active_for_user ? 'text-orange-500 border-orange-500' : 'text-gray-400']"
-              class="flex flex-col flex-shrink-0 items-center p-3 rounded-xl border w-16 h-max font-semibold"
-              @click="upvote(post)"
-            >
-              <IonArrowUp></IonArrowUp>
-              <span>{{ post.vote_count ?? 0 }}</span>
-            </button>
+        <ul v-else :key="route.params?.category">
+          <li class="border-b flex" v-for="post in store.posts">
+            <div class="p-6">
+              <button
+                :class="[
+                  post.active_for_user
+                    ? 'text-orange-500 border-orange-500 hover:text-orange-600'
+                    : 'text-gray-400 hover:text-gray-800',
+                ]"
+                class="flex flex-col flex-shrink-0 items-center transition p-3 rounded-xl border w-16 h-max font-semibold"
+                @click="upvote(post)"
+              >
+                <IonArrowUp></IonArrowUp>
+                <span>{{ post.vote_count ?? 0 }}</span>
+              </button>
+            </div>
             <button
               @click="goTo({ page: 'postview', params: post })"
-              class="text-left ml-6 w-full flex items-center justify-between"
+              class="text-left my-3 rounded-xl px-3 w-full flex items-center justify-between transition bg-white hover:bg-gray-50"
             >
               <div>
                 <h3 class="font-medium">{{ post.title }}</h3>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { Comment, Post } from "@/interface"
-import { route, goTo } from "@/state/router"
+import { useRouter } from "@/composables/router"
 import { store } from "@/state/store"
 import { useSupabase } from "@/composables/supabase"
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 
+const { route, oldRoute, goTo } = useRouter()
 const supabase = useSupabase()
 const pending = ref(false)
 
@@ -63,7 +64,7 @@ onMounted(async () => {
 <template>
   <div>
     <nav>
-      <button class="nav-button" @click="goTo({ page: 'category', params: route.params })">
+      <button class="nav-button" @click="goTo(oldRoute)">
         <IonBack class="mr-3"></IonBack><span class="mr-0.5">Back to board</span>
       </button>
     </nav>

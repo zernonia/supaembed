@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSupabase } from "@/composables/supabase"
-import { route, goTo } from "./state/router"
+import { useRouter } from "@/composables/router"
 import { computed, onMounted, toRefs } from "vue"
 
 import Roadmap from "./views/Roadmap.vue"
@@ -12,7 +12,7 @@ const routeMap = {
   category: Category,
   postview: PostView,
 }
-
+const { route, goTo } = useRouter()
 const supabase = useSupabase()
 
 onMounted(async () => {

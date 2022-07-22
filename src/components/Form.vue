@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import slugify from "slugify"
 import { useSupabase } from "@/composables/supabase"
-import { route } from "@/state/router"
+import { useRouter } from "@/composables/router"
 
 const emits = defineEmits(["submitted"])
 
+const { route, goTo } = useRouter()
 const supabase = useSupabase()
+
 const save = async (ev: any) => {
   const { data } = await supabase.from("posts").insert({
     ...ev,
