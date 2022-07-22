@@ -30,8 +30,14 @@ const currentView = computed(() => {
 
 <template>
   <div class="max-w-screen-lg mx-auto">
-    <span>isAdmin : {{ store.isAdmin }}</span>
-
+    <a
+      href="https://github.com/zernonia/supaembed"
+      target="_blank"
+      class="mb-6 flex items-center text-4xl font-semibold"
+    >
+      <h2 class="bg-orange-500 text-white px-4 py-2 rounded-xl w-min">Supaembed</h2>
+      <h3 class="ml-4 text-gray-800">Feedback</h3>
+    </a>
     <component :is="currentView" />
   </div>
 </template>

@@ -19,7 +19,7 @@ const isReplying = ref(false)
 
       <div class="text-gray-400 mt-4 text-xs flex">
         <p>{{ new Date(comment.created_at).toLocaleString() }}</p>
-        <button @click="isReplying = !isReplying" class="flex items-center ml-8 hover:text-gray-900 transition">
+        <button @click="isReplying = !isReplying" class="flex items-center ml-8 hover:text-gray-800 transition">
           <IonReply class="mr-2 text-base"></IonReply> Reply
         </button>
       </div>
