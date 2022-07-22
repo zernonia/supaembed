@@ -123,7 +123,7 @@ onMounted(async () => {
       </div>
       <div class="ml-6 min-w-72 bg-gray-50 text-gray-800 p-6 rounded-xl border h-min min-h-64">
         <h3 class="font-medium">Voters</h3>
-        <div class="mt-4 flex flex-wrap">
+        <div class="mt-6 flex flex-wrap">
           <Avatar class="mr-2 mb-2" v-for="{ user } in voters" :src="user.avatar" :alt="user.name"></Avatar>
         </div>
       </div>
