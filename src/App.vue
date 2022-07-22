@@ -30,7 +30,6 @@ const currentView = computed(() => {
 
 <template>
   <div class="max-w-screen-lg mx-auto">
-    {{ store.isAdmin }}
     <a
       href="https://github.com/zernonia/supaembed"
       target="_blank"

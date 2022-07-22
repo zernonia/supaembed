@@ -1,8 +1,8 @@
 import { watch, shallowReactive } from "vue"
 
 const route = shallowReactive({
-  page: "category",
-  params: { category: "bugs" } as any,
+  page: "roadmap",
+  params: {} as any,
 })
 
 const oldRoute = shallowReactive({

@@ -28,7 +28,7 @@ onMounted(() => {
 })
 
 watch(
-  () => route.params.category,
+  () => route.params?.category,
   (n, o) => {
     if (!n || !o) return
     if (n !== o) {
@@ -55,6 +55,7 @@ const upvote = async (post: Post) => {
 <template>
   <div>
     <nav class="flex space-x-2">
+      <button class="nav-button" @click="goTo({ page: 'roadmap' })">Roadmap</button>
       <button class="nav-button" @click="goTo({ page: 'category', params: { category: 'bugs' } })">Bugs</button>
       <button class="nav-button" @click="goTo({ page: 'category', params: { category: 'feature requests' } })">
         Feature requests
