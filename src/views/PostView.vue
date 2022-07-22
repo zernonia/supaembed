@@ -7,7 +7,18 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 const { route, oldRoute, goTo } = useRouter()
 const supabase = useSupabase()
 const pending = ref(false)
+const isEdit = ref(false)
 const post = computed(() => route.params as Post)
+
+const saveEdit = async () => {
+  isEdit.value = false
+  const { data, error } = await supabase
+    .from<Post>("posts")
+    .update({
+      description: post.value.description,
+    })
+    .eq("id", post.value.id)
+}
 
 const comments = ref<Comment[]>([])
 const recursiveComment = (comments: Comment[], parent_id: string | null) => {
@@ -33,7 +44,7 @@ const fetchComment = async () => {
     .from<Comment>("comments")
     .select("*, user:display_users!user_id(*)")
     .eq("post_id", post.value.id)
-  // .is("parent_id", null)
+    .order("created_at", { ascending: true })
   if (data) {
     comments.value = recursiveComment(data, null)
   }
@@ -99,12 +110,36 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div class="mt-6 flex">
+          <div class="mt-6 flex group">
             <Avatar class="mx-1" :src="post.user.avatar" :alt="post.user.name"></Avatar>
-            <div class="ml-6 mt-2">
+            <div class="ml-6 mt-2 w-full">
               <h3 class="font-medium text-sm">{{ post.user.name }}</h3>
-              <p class="mt-2 line-clamp-2 text-sm text-gray-800">{{ post.description }}</p>
-              <p class="text-gray-400 mt-4 text-xs">{{ new Date(post.created_at).toLocaleString() }}</p>
+
+              <div v-if="!isEdit">
+                <p class="mt-2 line-clamp-2 text-sm text-gray-800">{{ post.description }}</p>
+                <div class="flex items-center mt-4">
+                  <p class="text-gray-400 text-xs">{{ new Date(post.created_at).toLocaleString() }}</p>
+
+                  <button
+                    v-if="post.user_id === supabase.auth.user()?.id"
+                    @click="isEdit = !isEdit"
+                    class="group-hover:flex hidden text-gray-400 text-xs items-center ml-8 hover:text-gray-800 transition"
+                  >
+                    <IonEdit class="mr-2 text-base"></IonEdit> Edit
+                  </button>
+                </div>
+              </div>
+
+              <FormEdit @cancel="isEdit = false" @save="saveEdit" v-else>
+                <FormKit
+                  type="textarea"
+                  v-model="post.description"
+                  name="comment"
+                  rows="2"
+                  placeholder="Comment here"
+                  validation="required"
+                />
+              </FormEdit>
             </div>
           </div>
         </section>

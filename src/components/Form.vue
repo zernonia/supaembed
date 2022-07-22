@@ -61,7 +61,8 @@ const save = async (ev: any) => {
   @apply text-xs text-red-500;
 }
 
-[data-type="submit"] .formkit-input {
+[data-type="submit"] .formkit-input,
+[data-type="button"] .formkit-input {
   @apply relative inline-flex items-center bg-orange-500 px-4 py-2 w-auto text-white rounded-md focus:outline-orange-600 opacity-100 disabled:opacity-50 disabled:cursor-not-allowed transition;
 }
 

@@ -16,6 +16,7 @@ const fetchData = async () => {
     .from<Post>("posts_with_metadata")
     .select("*, user:display_users!user_id(*)")
     .match({ category: route.params.category })
+    .order("created_at", { ascending: true })
   if (data) {
     store.posts = data
   }
