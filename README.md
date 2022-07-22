@@ -13,7 +13,7 @@
     Free • Open Source
     <br />
     <br />
-    <a href="https://www.aurora.courses/feedback">View Demo</a>
+    <a href="https://www.aurora.courses/supaembed">View Demo</a>
     ·
     <a href="https://github.com/zernonia/supaembed/issues">Report Bug</a>
     ·
