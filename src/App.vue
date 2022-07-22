@@ -6,6 +6,7 @@ import { computed, onMounted, toRefs } from "vue"
 import Roadmap from "./views/Roadmap.vue"
 import Category from "./views/Category.vue"
 import PostView from "./views/PostView.vue"
+import { store } from "./state/store"
 
 const routeMap = {
   roadmap: Roadmap,
@@ -16,8 +17,8 @@ const { route, goTo } = useRouter()
 const supabase = useSupabase()
 
 onMounted(async () => {
-  const { data } = await supabase.from("posts").select("*")
-  console.log({ data })
+  const { data, error } = await supabase.rpc("is_admin").select("*")
+  if (data) store.isAdmin = data as unknown as boolean
 })
 
 const currentView = computed(() => {
@@ -29,6 +30,8 @@ const currentView = computed(() => {
 
 <template>
   <div class="max-w-screen-lg mx-auto">
+    <span>isAdmin : {{ store.isAdmin }}</span>
+
     <component :is="currentView" />
   </div>
 </template>

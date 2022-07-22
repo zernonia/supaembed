@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     IonArrowUp: typeof import('./src/components/IonArrowUp.vue')['default']
     IonBack: typeof import('./src/components/IonBack.vue')['default']
     IonChat: typeof import('./src/components/IonChat.vue')['default']
+    IonPerson: typeof import('./src/components/IonPerson.vue')['default']
     IonReply: typeof import('./src/components/IonReply.vue')['default']
     Loading: typeof import('./src/components/Loading.vue')['default']
   }
