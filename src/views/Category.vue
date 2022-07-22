@@ -85,11 +85,11 @@ const upvote = async (post: Post) => {
             </div>
             <button
               @click="goTo({ page: 'postview', params: post })"
-              class="text-left my-3 rounded-xl px-3 w-full flex items-center justify-between transition bg-white hover:bg-gray-50"
+              class="text-left my-3 rounded-xl p-3 w-full flex items-center justify-between transition bg-white hover:bg-gray-50"
             >
               <div>
                 <h3 class="font-medium">{{ post.title }}</h3>
-                <h5 v-if="post.status">{{ post.status }}</h5>
+                <Tag :post="post"></Tag>
                 <p class="mt-3 line-clamp-2 text-sm text-gray-500">{{ post.description }}</p>
               </div>
 

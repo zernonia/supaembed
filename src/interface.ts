@@ -12,7 +12,7 @@ export interface Post {
   slug: string
   created_at: Date
   category: string
-  status?: string
+  status: string
   vote_count?: number
   comment_count?: number
   active_for_user?: boolean
@@ -36,4 +36,11 @@ export interface Vote {
   user_id: string
   value: number
   user: User
+}
+
+export enum Status {
+  "under review" = "under review",
+  "planned" = "planned",
+  "in progress" = "in progress",
+  "live" = "live",
 }

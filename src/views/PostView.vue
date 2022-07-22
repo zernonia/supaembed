@@ -105,7 +105,7 @@ onMounted(async () => {
             <div @click="goTo({ page: 'postview', params: post })" class="ml-6 w-full">
               <div class="mt-2">
                 <h3 class="font-medium">{{ post.title }}</h3>
-                <h5 v-if="post.status">{{ post.status }}</h5>
+                <Tag :post="post"></Tag>
               </div>
             </div>
           </div>
