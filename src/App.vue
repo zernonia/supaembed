@@ -26,6 +26,11 @@ const currentView = computed(() => {
   let component = routeMap[route.page]
   if (component) return component
 })
+
+const routeTitle = computed(() => {
+  if (route.page === "roadmap") return "roadmap"
+  if (route.page === "category") return route.params?.category
+})
 </script>
 
 <template>
@@ -36,7 +41,7 @@ const currentView = computed(() => {
       class="mb-6 flex items-center text-4xl font-semibold"
     >
       <h2 class="bg-orange-500 text-white px-4 py-2 rounded-xl w-min">Supaembed</h2>
-      <h3 class="ml-4 text-gray-800">Feedback</h3>
+      <h3 class="ml-4 text-gray-800 capitalize">{{ routeTitle }}</h3>
     </a>
     <component :is="currentView" />
   </div>
