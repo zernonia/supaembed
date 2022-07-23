@@ -39,7 +39,7 @@ Then I discovered the amazing Embedding features by [Dashibase](https://github.c
 
 ![Supabase Setting's Schema](/images/settings-schema.png)
 
-After that, I expose the NEW schema (so that it won't clogged up public schema), and utilized Supabase powerful Postgrest endpoint, as well as the embedding faeture above to build this tool.
+After that, I expose the NEW schema (so that it won't clogged up public schema), and utilized Supabase powerful Postgrest endpoint, as well as the embedding feature above to build this tool.
 
 Enjoy! 😁
 
