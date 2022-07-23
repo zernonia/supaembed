@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     IonEdit: typeof import('./src/components/IonEdit.vue')['default']
     IonPerson: typeof import('./src/components/IonPerson.vue')['default']
     IonReply: typeof import('./src/components/IonReply.vue')['default']
+    IonTrash: typeof import('./src/components/IonTrash.vue')['default']
     Loading: typeof import('./src/components/Loading.vue')['default']
     Tag: typeof import('./src/components/Tag.vue')['default']
   }

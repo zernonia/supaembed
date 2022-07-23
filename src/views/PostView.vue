@@ -19,6 +19,10 @@ const saveEdit = async () => {
     })
     .eq("id", post.value.id)
 }
+const deletePost = async () => {
+  const { error } = await supabase.from<Post>("posts").delete().eq("id", post.value.id)
+  goTo(oldRoute)
+}
 
 const comments = ref<Comment[]>([])
 const recursiveComment = (comments: Comment[], parent_id: string | null) => {
@@ -120,13 +124,20 @@ onMounted(async () => {
                 <div class="flex items-center mt-4">
                   <p class="text-gray-400 text-xs">{{ new Date(post.created_at).toLocaleString() }}</p>
 
-                  <button
-                    v-if="post.user_id === supabase.auth.user()?.id"
-                    @click="isEdit = !isEdit"
-                    class="group-hover:flex hidden text-gray-400 text-xs items-center ml-8 hover:text-gray-800 transition"
-                  >
-                    <IonEdit class="mr-2 text-base"></IonEdit> Edit
-                  </button>
+                  <div v-if="post.user_id === supabase.auth.user()?.id" class="group-hover:flex items-center hidden">
+                    <button
+                      @click="isEdit = !isEdit"
+                      class="text-gray-400 text-xs items-center ml-4 hover:text-gray-800 transition"
+                    >
+                      <IonEdit class="mr-2 text-base"></IonEdit>
+                    </button>
+                    <button
+                      @click="deletePost"
+                      class="text-gray-400 text-xs items-center ml-2 hover:text-gray-800 transition"
+                    >
+                      <IonTrash class="mr-2 text-base"></IonTrash>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -152,7 +163,12 @@ onMounted(async () => {
 
           <div class="mt-4">
             <Loading v-if="pending && !comments.length"></Loading>
-            <Comment @submitted="fetchComment()" v-for="comment in comments" :comment="comment"></Comment>
+            <Comment
+              @updated="fetchComment()"
+              @submitted="fetchComment()"
+              v-for="comment in comments"
+              :comment="comment"
+            ></Comment>
           </div>
         </div>
       </div>
