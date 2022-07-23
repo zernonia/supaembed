@@ -5,7 +5,7 @@
     <img src="src/assets/logo.png" alt="Logo" width="auto" height="80">
   </a>
 
-  <h3 align="center">Supaembed <strong>(Alpha)</strong></h3>
+  <h3 align="center">Supaembed</h3>
 
   <p align="center">
     Embed custom tools on your website with your <strong>Supabase</strong> instance.
@@ -21,7 +21,7 @@
   </p>
 </p>
 
-![Supaembed](public/og.png)
+![Supaembed](images/og.png)
 
 ## 🚀 Features
 
@@ -37,7 +37,7 @@ I wanted to have a **bug/feature request/roadmap tools** in my [latest project, 
 
 Then I discovered the amazing Embedding features by [Dashibase](https://github.com/Dashibase/dashibase-insert), which allow user to embed form and still respect the RLS. I reached out to [SK](https://github.com/greentfrapp) (Thank you! 🙌🏼) to learn the mechanism.
 
-![Supabase Setting's Schema](/public//settings-schema.png)
+![Supabase Setting's Schema](/images/settings-schema.png)
 
 After that, I expose the NEW schema (so that it won't clogged up public schema), and utilized Supabase powerful Postgrest endpoint, as well as the embedding faeture above to build this tool.
 
@@ -50,9 +50,28 @@ Enjoy! 😁
 - [WindiCSS](https://windicss.org/)
 - [Supabase](https://supabase.com/)
 
-## Steps
+## Setup (v1)
 
-WIP 😅
+1. Login to your [Supabase](https://app.supabase.com/) instance that you want to setup this tool.
+
+2. Copy SQL script from [`sql/v1`](/sql/v1), following the file number 1,2,3, and paste it into your Supabase SQL editor and `RUN` it.
+
+   > In [1.supabase_function.sql](/sql/v1/1.supabase_function.sql), you will need to add your admin users' uuid to make sure the admin have the capabiltites to handle admin stuff.
+
+3. Go to Dashboard Settings → API → Settings → Schema, and add the newly created **supaembed** schema into the Schema field.
+   ![Supabase Setting's Schema](/images/settings-schema.png)
+
+4. Copy the `script` below and paste in the HTML where you want it to be rendered.
+   > It's ok to paste your url and keys here because it's gonna be public anyway 😂
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/zernonia/supaembed@1.0.0/dist/embed.js" async defer></script>
+<div id="supaembed" data-url="YOUR SUPABASE URL" data-anon-key="YOUR SUPABASE ANON KEY"></div>
+```
+
+5. That's it! You should be able to see Supaembed on your website now!
+
+> Let me know if anything stuck!
 
 ## 🌎 Local Development
 
