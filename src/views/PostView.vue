@@ -96,8 +96,8 @@ onMounted(async () => {
 
     <div class="mt-8 w-full flex">
       <div class="flex-grow">
-        <section class="p-6 border-b">
-          <div class="flex">
+        <section class="p-6 border-b flex">
+          <div class="flex flex-col">
             <button
               :class="[post.active_for_user ? 'text-orange-500 border-orange-500' : 'text-gray-400']"
               class="flex flex-col flex-shrink-0 items-center p-3 rounded-xl border w-16 h-max font-semibold"
@@ -106,20 +106,18 @@ onMounted(async () => {
               <IonArrowUp></IonArrowUp>
               <span>{{ post.vote_count ?? 0 }}</span>
             </button>
-            <div @click="goTo({ page: 'postview', params: post })" class="ml-6 w-full">
-              <div class="mt-2">
-                <h3 class="font-medium">{{ post.title }}</h3>
-                <Tag :post="post"></Tag>
-              </div>
-            </div>
+            <Avatar class="mx-1 mt-6" :src="post.user.avatar" :alt="post.user.name"></Avatar>
           </div>
 
-          <div class="mt-6 flex group">
-            <Avatar class="mx-1" :src="post.user.avatar" :alt="post.user.name"></Avatar>
-            <div class="ml-6 mt-2 w-full">
-              <h3 class="font-medium text-sm">{{ post.user.name }}</h3>
+          <div v-if="!isEdit" class="ml-6 flex-grow flex flex-col group">
+            <div class="mt-2">
+              <h3 class="font-medium">{{ post.title }}</h3>
+              <Tag :post="post"></Tag>
+            </div>
+            <div class="mt-6 w-full">
+              <h3 class="font-medium text-sm">{{ post.user.name ?? "Anon" }}</h3>
 
-              <div v-if="!isEdit">
+              <div>
                 <p class="mt-2 line-clamp-2 text-sm text-gray-800">{{ post.description }}</p>
                 <div class="flex items-center mt-4">
                   <p class="text-gray-400 text-xs">{{ new Date(post.created_at).toLocaleString() }}</p>
@@ -140,19 +138,27 @@ onMounted(async () => {
                   </div>
                 </div>
               </div>
-
-              <FormEdit @cancel="isEdit = false" @save="saveEdit" v-else>
-                <FormKit
-                  type="textarea"
-                  v-model="post.description"
-                  name="comment"
-                  rows="2"
-                  placeholder="Comment here"
-                  validation="required"
-                />
-              </FormEdit>
             </div>
           </div>
+          <FormEdit class="ml-6 flex-grow-0 w-full text-sm" @cancel="isEdit = false" @save="saveEdit" v-else>
+            <FormKit
+              type="text"
+              v-model="post.title"
+              name="title"
+              label="Title"
+              placeholder="Short, descriptive title"
+              validation="required"
+            />
+            <FormKit
+              type="textarea"
+              v-model="post.description"
+              name="comment"
+              rows="3"
+              placeholder="Comment here"
+              label="Description"
+              validation="required"
+            />
+          </FormEdit>
         </section>
 
         <!-- Comments -->
